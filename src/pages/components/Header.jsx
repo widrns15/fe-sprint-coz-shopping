@@ -33,14 +33,14 @@ const HeaderSection = styled.header`
   left: 0;
   right: 0;
   width: 100vw;
-  height: 5rem;
+  height: 8.3vh;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #ffffff;
   box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.1);
-
+  z-index: 1;
   .logo {
     display: flex;
     margin-left: 4rem;
