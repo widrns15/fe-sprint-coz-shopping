@@ -11,7 +11,11 @@ const MainPage = () => {
     axios
       .get("http://cozshopping.codestates-seb.link/api/v1/products")
       .then((res) => {
-        setProducts(res.data);
+        const updatedProducts = res.data.map((product) => ({
+          ...product,
+          marked: false,
+        }));
+        setProducts(updatedProducts);
         setIsLoding(false);
       })
       .catch((err) => console.log(err));

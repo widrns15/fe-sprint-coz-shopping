@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import markStar from "../img/markstar.svg";
+import unMarkStar from "../img/unmarkstar.svg";
 
 const ProductCard = ({ item }) => {
   const {
@@ -12,7 +14,14 @@ const ProductCard = ({ item }) => {
     image_url,
     brand_image_url,
     follower,
+    marked,
   } = item;
+
+  const [isMarked, setIsMarked] = useState(item.marked);
+
+  const bookMarkHandler = () => {
+    setIsMarked(!isMarked);
+  };
 
   switch (type) {
     case "Product":
@@ -20,6 +29,12 @@ const ProductCard = ({ item }) => {
         <CardSection>
           <div className="thumbnail">
             <img src={image_url} alt="thumbnail" />
+            <img
+              className="bookmark"
+              onClick={bookMarkHandler}
+              src={isMarked ? markStar : unMarkStar}
+              alt="bookmark"
+            />
           </div>
           <div>
             <span className="title">{title}</span>
@@ -36,6 +51,12 @@ const ProductCard = ({ item }) => {
         <CardSection>
           <div className="thumbnail">
             <img src={image_url} alt="thumbnail" />
+            <img
+              className="bookmark"
+              onClick={bookMarkHandler}
+              src={isMarked ? markStar : unMarkStar}
+              alt="bookmark"
+            />
           </div>
           <div>
             <span className="title"># {title}</span>
@@ -47,6 +68,12 @@ const ProductCard = ({ item }) => {
         <CardSection>
           <div className="thumbnail">
             <img src={image_url} alt="thumbnail" />
+            <img
+              className="bookmark"
+              onClick={bookMarkHandler}
+              src={isMarked ? markStar : unMarkStar}
+              alt="bookmark"
+            />
           </div>
           <div>
             <span className="title">{title}</span>
@@ -61,6 +88,12 @@ const ProductCard = ({ item }) => {
         <CardSection>
           <div className="thumbnail">
             <img src={brand_image_url} alt="thumbnail" />
+            <img
+              className="bookmark"
+              onClick={bookMarkHandler}
+              src={isMarked ? markStar : unMarkStar}
+              alt="bookmark"
+            />
           </div>
           <div>
             <span className="title">{brand_name}</span>
@@ -89,6 +122,14 @@ const CardSection = styled.div`
       width: 16.5rem;
       height: 13.125rem;
       border-radius: 0.9375rem;
+    }
+    .bookmark {
+      position: absolute;
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-left: 14.25rem;
+      margin-top: 10.875rem;
+      cursor: pointer;
     }
   }
   div {
