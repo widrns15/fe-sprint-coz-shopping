@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import markStar from "../img/markstar.svg";
 import unMarkStar from "../img/unmarkstar.svg";
 
 const Modal = ({ item, isMarked, handleModalClose, bookMarkHandler }) => {
+  const modalRef = useRef();
+
   const backgroundImage = item.brand_image_url
     ? `url(${item.brand_image_url})`
     : `url(${item.image_url})`;
 
-  const closeModal = (e) => {
-    e.stopPropagation();
+  const closeModal = () => {
     handleModalClose();
   };
 
@@ -24,9 +25,15 @@ const Modal = ({ item, isMarked, handleModalClose, bookMarkHandler }) => {
     return item.title || item.brand_name;
   };
 
+  const closeModalHandler = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      closeModal();
+    }
+  };
+
   return (
-    <ModalSection>
-      <div className="background" style={{ backgroundImage }}>
+    <ModalSection onClick={closeModalHandler}>
+      <div ref={modalRef} className="background" style={{ backgroundImage }}>
         <button className="closebutton" onClick={closeModal}>
           X
         </button>
