@@ -19,7 +19,7 @@ const ProductCard = ({ item, handleBookMark }) => {
     marked,
   } = item;
 
-  const [isMarked, setIsMarked] = useState(item.marked);
+  const [isMarked, setIsMarked] = useState(marked);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const bookMarkHandler = () => {

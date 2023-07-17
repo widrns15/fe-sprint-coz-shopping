@@ -8,18 +8,36 @@ const MainPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+
     axios
       .get("http://cozshopping.codestates-seb.link/api/v1/products")
       .then((res) => {
         const updatedProducts = res.data.map((product) => ({
           ...product,
-          marked: false,
+          marked: savedBookmarks.includes(product.id),
         }));
         setProducts(updatedProducts);
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const bookmarks = products
+        .filter((product) => product.marked)
+        .map((product) => product.id);
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+      console.log(bookmarks);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [products]);
 
   const bookmarkedProducts = products.filter((product) => product.marked);
 
