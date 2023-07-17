@@ -33,20 +33,27 @@ const ProductCard = ({ item }) => {
     setIsModalOpen(false);
   };
 
-  switch (type) {
-    case "Product":
-      return (
-        <CardSection>
-          <div className="thumbnail">
-            <img
-              className="bookmark"
-              onClick={bookMarkHandler}
-              src={isMarked ? markStar : unMarkStar}
-              alt="bookmark"
-            />
-            <img src={image_url} alt="thumbnail" onClick={handleCardClick} />
-          </div>
-          <DescriptionSection onClick={handleCardClick}>
+  const renderThumbnail = () => (
+    <div className="thumbnail">
+      <img
+        className="bookmark"
+        onClick={bookMarkHandler}
+        src={isMarked ? markStar : unMarkStar}
+        alt="bookmark"
+      />
+      {type !== "Brand" ? (
+        <img src={image_url} alt="thumbnail" onClick={handleCardClick} />
+      ) : (
+        <img src={brand_image_url} alt="thumbnail" onClick={handleCardClick} />
+      )}
+    </div>
+  );
+
+  const renderDescription = () => {
+    switch (type) {
+      case "Product":
+        return (
+          <>
             <div>
               <span className="title">{title}</span>
               <span className="discount">{discountPercentage}%</span>
@@ -55,91 +62,28 @@ const ProductCard = ({ item }) => {
               <span></span>
               <span className="price">{price}원</span>
             </div>
-          </DescriptionSection>
-          {isModalOpen && (
-            <Modal
-              item={item}
-              isMarked={isMarked}
-              handleModalClose={handleModalClose}
-              bookMarkHandler={bookMarkHandler}
-            />
-          )}
-        </CardSection>
-      );
-    case "Category":
-      return (
-        <CardSection>
-          <div className="thumbnail">
-            <img
-              className="bookmark"
-              onClick={bookMarkHandler}
-              src={isMarked ? markStar : unMarkStar}
-              alt="bookmark"
-            />
-            <img src={image_url} alt="thumbnail" onClick={handleCardClick} />
+          </>
+        );
+      case "Category":
+        return (
+          <div>
+            <span className="title"># {title}</span>
           </div>
-          <DescriptionSection onClick={handleCardClick}>
-            <div>
-              <span className="title"># {title}</span>
-            </div>
-          </DescriptionSection>
-          {isModalOpen && (
-            <Modal
-              item={item}
-              isMarked={isMarked}
-              handleModalClose={handleModalClose}
-              bookMarkHandler={bookMarkHandler}
-            />
-          )}
-        </CardSection>
-      );
-    case "Exhibition":
-      return (
-        <CardSection>
-          <div className="thumbnail">
-            <img
-              className="bookmark"
-              onClick={bookMarkHandler}
-              src={isMarked ? markStar : unMarkStar}
-              alt="bookmark"
-            />
-            <img src={image_url} alt="thumbnail" onClick={handleCardClick} />
-          </div>
-          <DescriptionSection onClick={handleCardClick}>
+        );
+      case "Exhibition":
+        return (
+          <>
             <div>
               <span className="title">{title}</span>
             </div>
             <div>
               <span className="sub_title">{sub_title}</span>
             </div>
-          </DescriptionSection>
-          {isModalOpen && (
-            <Modal
-              item={item}
-              isMarked={isMarked}
-              handleModalClose={handleModalClose}
-              bookMarkHandler={bookMarkHandler}
-            />
-          )}
-        </CardSection>
-      );
-    case "Brand":
-      return (
-        <CardSection>
-          <div className="thumbnail">
-            <img
-              className="bookmark"
-              onClick={bookMarkHandler}
-              src={isMarked ? markStar : unMarkStar}
-              alt="bookmark"
-            />
-            <img
-              src={brand_image_url}
-              alt="thumbnail"
-              onClick={handleCardClick}
-            />
-          </div>
-          <DescriptionSection onClick={handleCardClick}>
+          </>
+        );
+      case "Brand":
+        return (
+          <>
             <div>
               <span className="title">{brand_name}</span>
               <span className="follower">관심고객수</span>
@@ -148,19 +92,29 @@ const ProductCard = ({ item }) => {
               <span></span>
               <span className="follower">{follower}</span>
             </div>
-          </DescriptionSection>
-          {isModalOpen && (
-            <Modal
-              item={item}
-              isMarked={isMarked}
-              handleModalClose={handleModalClose}
-              bookMarkHandler={bookMarkHandler}
-            />
-          )}
-        </CardSection>
-      );
-    default:
-  }
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <CardSection>
+      {renderThumbnail()}
+      <DescriptionSection onClick={handleCardClick}>
+        {renderDescription()}
+      </DescriptionSection>
+      {isModalOpen && (
+        <Modal
+          item={item}
+          isMarked={isMarked}
+          handleModalClose={handleModalClose}
+          bookMarkHandler={bookMarkHandler}
+        />
+      )}
+    </CardSection>
+  );
 };
 
 const CardSection = styled.div`
