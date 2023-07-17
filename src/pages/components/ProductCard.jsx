@@ -4,8 +4,9 @@ import markStar from "../img/markstar.svg";
 import unMarkStar from "../img/unmarkstar.svg";
 import Modal from "./Modal";
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item, handleBookMark }) => {
   const {
+    id,
     type,
     title,
     sub_title,
@@ -23,6 +24,7 @@ const ProductCard = ({ item }) => {
 
   const bookMarkHandler = () => {
     setIsMarked((prevMarked) => !prevMarked);
+    handleBookMark(id);
   };
 
   const handleCardClick = () => {

@@ -5,7 +5,7 @@ import axios from "axios";
 
 const MainPage = () => {
   const [products, setProducts] = useState([]);
-  const [isLoding, setIsLoding] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -16,20 +16,59 @@ const MainPage = () => {
           marked: false,
         }));
         setProducts(updatedProducts);
-        setIsLoding(false);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
 
+  const bookmarkedProducts = products.filter((product) => product.marked);
+
+  const bookMarkHandler = (id) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id ? { ...product, marked: !product.marked } : product
+      )
+    );
+  };
+
   return (
     <>
-      {isLoding ? (
+      {isLoading ? (
         <LoadingSection>Loading...</LoadingSection>
       ) : (
         <MainSection>
-          {products.slice(0, 4).map((product, idx) => {
-            return <ProductCard item={product} key={product.id}></ProductCard>;
-          })}
+          <ListSection>
+            <h2>상품 리스트</h2>
+            <ProductSection>
+              {products.slice(0, 4).map((product, idx) => {
+                return (
+                  <ProductCard
+                    item={product}
+                    key={product.id}
+                    handleBookMark={bookMarkHandler}
+                  />
+                );
+              })}
+            </ProductSection>
+          </ListSection>
+          <ListSection>
+            <h2>북마크 리스트</h2>
+            <ProductSection>
+              {bookmarkedProducts.length ? (
+                bookmarkedProducts
+                  .slice(0, 4)
+                  .map((product) => (
+                    <ProductCard
+                      item={product}
+                      key={product.id}
+                      handleBookMark={bookMarkHandler}
+                    />
+                  ))
+              ) : (
+                <h5>북마크된 항목이 없어요!</h5>
+              )}
+            </ProductSection>
+          </ListSection>
         </MainSection>
       )}
     </>
@@ -49,13 +88,34 @@ const LoadingSection = styled.div`
 const MainSection = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 24px;
   width: 100vw;
   height: 82.6vh;
   margin-top: 8.3vh;
-  background: #ffffff;
+  background-color: white;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+`;
+
+const ListSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 41.3vh;
+`;
+
+const ProductSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 70.5rem;
+  height: 13.125rem;
 `;
 
 export default MainPage;
