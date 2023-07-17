@@ -2,24 +2,41 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProductCard from "./components/ProductCard";
 import axios from "axios";
-
 const MainPage = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+
     axios
       .get("http://cozshopping.codestates-seb.link/api/v1/products")
       .then((res) => {
         const updatedProducts = res.data.map((product) => ({
           ...product,
-          marked: false,
+          marked: savedBookmarks.includes(product.id),
         }));
         setProducts(updatedProducts);
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const bookmarks = products
+        .filter((product) => product.marked)
+        .map((product) => product.id);
+      localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+      console.log(bookmarks);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [products]);
 
   const bookmarkedProducts = products.filter((product) => product.marked);
 
@@ -30,7 +47,6 @@ const MainPage = () => {
       )
     );
   };
-
   return (
     <>
       {isLoading ? (
@@ -74,6 +90,7 @@ const MainPage = () => {
     </>
   );
 };
+
 const LoadingSection = styled.div`
   width: 100%;
   height: 100vh;
@@ -83,6 +100,7 @@ const LoadingSection = styled.div`
   font-weight: 300;
   color: black;
 `;
+
 const MainSection = styled.div`
   position: relative;
   display: flex;
@@ -99,14 +117,12 @@ const MainSection = styled.div`
     margin-bottom: 0.75rem;
   }
 `;
-
 const ListSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 41.3vh;
 `;
-
 const ProductSection = styled.div`
   display: flex;
   justify-content: center;
@@ -115,5 +131,4 @@ const ProductSection = styled.div`
   width: 70.5rem;
   height: 13.125rem;
 `;
-
 export default MainPage;
