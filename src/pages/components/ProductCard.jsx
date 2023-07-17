@@ -4,8 +4,9 @@ import markStar from "../img/markstar.svg";
 import unMarkStar from "../img/unmarkstar.svg";
 import Modal from "./Modal";
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item, handleBookMark }) => {
   const {
+    id,
     type,
     title,
     sub_title,
@@ -17,22 +18,20 @@ const ProductCard = ({ item }) => {
     follower,
     marked,
   } = item;
-
-  const [isMarked, setIsMarked] = useState(item.marked);
+  const [isMarked, setIsMarked] = useState(marked);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const bookMarkHandler = () => {
     setIsMarked((prevMarked) => !prevMarked);
+    handleBookMark(id);
   };
 
   const handleCardClick = () => {
     setIsModalOpen(true);
   };
-
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
-
   const renderThumbnail = () => (
     <div className="thumbnail">
       <img
@@ -48,7 +47,6 @@ const ProductCard = ({ item }) => {
       )}
     </div>
   );
-
   const renderDescription = () => {
     switch (type) {
       case "Product":
@@ -98,7 +96,6 @@ const ProductCard = ({ item }) => {
         return null;
     }
   };
-
   return (
     <CardSection>
       {renderThumbnail()}
@@ -116,16 +113,13 @@ const ProductCard = ({ item }) => {
     </CardSection>
   );
 };
-
 const CardSection = styled.div`
   width: 16.5rem;
   height: 13.125rem;
   cursor: pointer;
-
   .thumbnail {
     width: 16.5rem;
     height: 13.125rem;
-
     img {
       width: 16.5rem;
       height: 13.125rem;
@@ -141,7 +135,6 @@ const CardSection = styled.div`
     }
   }
 `;
-
 const DescriptionSection = styled.div`
   div {
     display: flex;
@@ -169,5 +162,4 @@ const DescriptionSection = styled.div`
     font-weight: 700;
   }
 `;
-
 export default ProductCard;
