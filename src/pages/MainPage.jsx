@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProductCard from "./components/ProductCard";
 import axios from "axios";
+import markStar from "./img/markstar.svg";
+import unMarkStar from "./img/unmarkstar.svg";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const MainPage = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +33,6 @@ const MainPage = () => {
         .filter((product) => product.marked)
         .map((product) => product.id);
       localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-      console.log(bookmarks);
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -47,6 +51,29 @@ const MainPage = () => {
       )
     );
   };
+
+  const handleBookMark = (id) => {
+    bookMarkHandler(id);
+    const isMarked = products.find((product) => product.id === id)?.marked;
+    const message = isMarked
+      ? "상품이 북마크에서 제거되었습니다."
+      : "상품이 북마크에 추가되었습니다.";
+    const icon = isMarked ? unMarkStar : markStar;
+
+    toast(<CustomToast icon={icon} message={message} />, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: true,
+    });
+  };
+
+  const CustomToast = ({ icon, message }) => (
+    <ToastSection>
+      <img src={icon} alt="checkmark" />
+      <div>{message}</div>
+    </ToastSection>
+  );
+
   return (
     <>
       {isLoading ? (
@@ -61,7 +88,7 @@ const MainPage = () => {
                   <ProductCard
                     item={product}
                     key={product.id}
-                    handleBookMark={bookMarkHandler}
+                    handleBookMark={handleBookMark}
                   />
                 );
               })}
@@ -77,7 +104,7 @@ const MainPage = () => {
                     <ProductCard
                       item={product}
                       key={product.id}
-                      handleBookMark={bookMarkHandler}
+                      handleBookMark={handleBookMark}
                     />
                   ))
               ) : (
@@ -90,6 +117,16 @@ const MainPage = () => {
     </>
   );
 };
+
+const ToastSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 0.88rem;
+`;
 
 const LoadingSection = styled.div`
   width: 100%;
@@ -111,18 +148,21 @@ const MainSection = styled.div`
   height: 82.6vh;
   margin-top: 8.3vh;
   background-color: white;
+
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
   }
 `;
+
 const ListSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 41.3vh;
 `;
+
 const ProductSection = styled.div`
   display: flex;
   justify-content: center;
@@ -131,4 +171,5 @@ const ProductSection = styled.div`
   width: 70.5rem;
   height: 13.125rem;
 `;
+
 export default MainPage;
