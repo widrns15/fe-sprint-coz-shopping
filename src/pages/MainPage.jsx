@@ -44,7 +44,7 @@ const MainPage = () => {
 
   const bookmarkedProducts = products.filter((product) => product.marked);
 
-  const bookMarkHandler = (id) => {
+  const toggleBookmark = (id) => {
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
         product.id === id ? { ...product, marked: !product.marked } : product
@@ -53,7 +53,7 @@ const MainPage = () => {
   };
 
   const handleBookMark = (id) => {
-    bookMarkHandler(id);
+    toggleBookmark(id);
     const isMarked = products.find((product) => product.id === id)?.marked;
     const message = isMarked
       ? "상품이 북마크에서 제거되었습니다."

@@ -18,6 +18,7 @@ const ProductCard = ({ item, handleBookMark }) => {
     follower,
     marked,
   } = item;
+
   const [isMarked, setIsMarked] = useState(marked);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -29,9 +30,11 @@ const ProductCard = ({ item, handleBookMark }) => {
   const handleCardClick = () => {
     setIsModalOpen(true);
   };
+
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
   const renderThumbnail = () => (
     <div className="thumbnail">
       <img
@@ -47,6 +50,7 @@ const ProductCard = ({ item, handleBookMark }) => {
       )}
     </div>
   );
+
   const renderDescription = () => {
     switch (type) {
       case "Product":
@@ -102,6 +106,7 @@ const ProductCard = ({ item, handleBookMark }) => {
       <DescriptionSection onClick={handleCardClick}>
         {renderDescription()}
       </DescriptionSection>
+
       {isModalOpen && (
         <Modal
           item={item}
@@ -113,10 +118,12 @@ const ProductCard = ({ item, handleBookMark }) => {
     </CardSection>
   );
 };
+
 const CardSection = styled.div`
   width: 16.5rem;
   height: 13.125rem;
   cursor: pointer;
+
   .thumbnail {
     width: 16.5rem;
     height: 13.125rem;
@@ -135,6 +142,7 @@ const CardSection = styled.div`
     }
   }
 `;
+
 const DescriptionSection = styled.div`
   div {
     display: flex;
@@ -162,4 +170,5 @@ const DescriptionSection = styled.div`
     font-weight: 700;
   }
 `;
+
 export default ProductCard;
