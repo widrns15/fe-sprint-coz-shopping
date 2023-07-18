@@ -12,9 +12,9 @@ const Footer = () => {
 
 const FooterSection = styled.footer`
   width: 100vw;
-  height: 3.625rem;
+  height: 6.7vh;
   gap: 9px;
-  margin-top: 1.5rem;
+  margin-top: 2.4vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
