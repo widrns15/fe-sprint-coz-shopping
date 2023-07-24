@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGift } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
-const HeaderDropdown = () => {
+const HeaderDropdown = ({ dropDownHandler }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dropDownHandler();
+  }, [dropDownHandler]);
 
   return (
     <DropDownSection>
