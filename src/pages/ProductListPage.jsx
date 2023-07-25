@@ -1,11 +1,36 @@
 import React from "react";
 import styled from "styled-components";
 import Filter from "./components/Filter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./components/ProductCard";
 
 const ProductListPage = ({ products, handleBookMark }) => {
   const [filter, setFilter] = useState("All");
+  const [displayedProducts, setDisplayedProducts] = useState([]);
+  const [visibleProductCount, setVisibleProductCount] = useState(12);
+
+  const handleScroll = () => {
+    const isBottom =
+      window.innerHeight + window.scrollY >= document.body.offsetHeight;
+    if (isBottom) {
+      setVisibleProductCount((prevCount) => prevCount + 12);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const filteredProducts = products.filter(
+      (product) => product.type === filter || filter === "All"
+    );
+    const slicedProducts = filteredProducts.slice(0, visibleProductCount);
+    setDisplayedProducts(slicedProducts);
+  }, [products, filter, visibleProductCount]);
 
   const filterHandler = (filter) => {
     setFilter(filter);
@@ -15,16 +40,13 @@ const ProductListPage = ({ products, handleBookMark }) => {
     <ProductListSection>
       <Filter filter={filter} filterHandler={filterHandler} />
       <ProductSection>
-        {products
-          .filter((product) => product.type === filter || filter === "All")
-          .slice(0, 12)
-          .map((product) => (
-            <ProductCard
-              item={product}
-              key={product.id}
-              handleBookMark={handleBookMark}
-            />
-          ))}
+        {displayedProducts.map((product) => (
+          <ProductCard
+            item={product}
+            key={product.id}
+            handleBookMark={handleBookMark}
+          />
+        ))}
       </ProductSection>
     </ProductListSection>
   );
@@ -36,7 +58,6 @@ const ProductListSection = styled.div`
   align-items: center;
   gap: 0.75rem;
   width: 100vw;
-  height: 100vh;
   margin-top: 10.7vh;
 `;
 
@@ -46,6 +67,7 @@ const ProductSection = styled.div`
   gap: 4.5rem;
   max-width: 80vw;
   margin: 0 auto;
+  margin-bottom: 10.7vh;
 `;
 
 export default ProductListPage;
