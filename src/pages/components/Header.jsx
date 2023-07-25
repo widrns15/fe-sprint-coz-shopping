@@ -22,7 +22,7 @@ const Header = () => {
       <button onClick={dropDownHandler}>
         <img src={headerbutton} alt="헤더 드롭다운 버튼" />
       </button>
-      {isShow ? <HeaderDropdown /> : ""}
+      {isShow ? <HeaderDropdown dropDownHandler={dropDownHandler} /> : ""}
     </HeaderSection>
   );
 };
