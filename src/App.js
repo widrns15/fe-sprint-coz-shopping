@@ -101,7 +101,15 @@ function App() {
                 />
               }
             />
-            <Route path="/bookmark" element={<BookMarkPage />} />
+            <Route
+              path="/bookmark"
+              element={
+                <BookMarkPage
+                  products={products}
+                  handleBookMark={handleBookMark}
+                />
+              }
+            />
           </Routes>
           <Footer />
         </HashRouter>
